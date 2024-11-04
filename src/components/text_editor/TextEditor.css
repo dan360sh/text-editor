@@ -1,23 +1,18 @@
 .editor-container {
-    height: 100%;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
     box-sizing: border-box;
+    position: relative;
   }
-  
+
 .DraftEditor-root {
-    height: 100%;
-    width: 100%;
-    max-width: 600px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color:  #F8F8FB;
+    height: 296px;
+    width: 688px;
+    background: #191B20;
+    border-radius: 16px;
+    padding: 16px;
 }
 
 .DraftEditor-editorContainer {
@@ -26,28 +21,70 @@
 
 .public-DraftEditor-content {
     height: 100%;
+    overflow: auto;
+}
+
+.button-editor {
+    position: absolute;
+    bottom: 16px;
+    padding: 8px 16px;
+    color: #6E718F;
+    cursor: pointer;
+    outline: none;
+    background: #202020;
+    border: none;
+    border-radius: 32px;
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+}
+
+h1 {
+    font-family: sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 28px;
+    text-align: left;
+}
+
+h2 {
+    font-family: sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+}
+
+li {
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    text-align: left;
 }
 
 .placeholder-h1::before { 
     content: "Add a title for your slide…";
-    color: #aaa;
-    font-style: italic;
+    color: #9F9F9F;
+    font-family: sans-serif;
     position: absolute;
     display: inline;
   }
   
-  .placeholder-li::before {
+.placeholder-li::before {
     content: "Start your bullet list here...";
-    color: #aaa;
-    font-style: italic;
+    color: #9F9F9F;
+    font-family: sans-serif;
     position: absolute;
     display: inline;
   }
   
-  .placeholder-h2::before {
+.placeholder-h2::before {
     content: "Name your bullet list…";
-    color: #aaa;
-    font-style: italic;
+    color: #9F9F9F;
+    font-family: sans-serif;
     position: absolute;
     display: inline;
   }

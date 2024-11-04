@@ -107,7 +107,7 @@ export default function TextEditor () {
           setEditorState(RichUtils.toggleBlockType(editorState, 'header-two'));
         }
     };
-
+    
     const blur = () => {
         const textStructure: TextStructure = {title: '', content_blocks: []}
         const constentParce = convertToRaw(editorState.getCurrentContent());
@@ -142,6 +142,21 @@ export default function TextEditor () {
         setEditorState(newEditorState);
         return 'handled';
     };
+    const currentBlockType = () => {
+        const type = editorState.getCurrentContent().getBlockForKey(editorState.getSelection().getStartKey()).getType();
+        if('header-one' === type) {
+            return 'Title'
+        }
+        if('header-two' === type) {
+            return 'Heading'
+        }
+        if('unordered-list-item' === type) {
+            return 'Bullet'
+        }
+        return '';
+    }
+    
+    
     
     return (
         <div className="editor-container">
@@ -154,7 +169,7 @@ export default function TextEditor () {
                 onBlur={blur}
                 handlePastedText={handlePaste}
             />
-            <button onClick={toggleHeading}>Heading</button>
+            <button className="button-editor" onClick={toggleHeading}>Heading | {currentBlockType()}</button>
         </div>
 
     )
