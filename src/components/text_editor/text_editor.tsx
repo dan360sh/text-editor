@@ -103,7 +103,7 @@ export default function TextEditor () {
 
     //Делает буллит заголовком списка
     const toggleHeading = () => {
-        if(editorState.getCurrentContent().getBlockForKey(editorState.getSelection().getStartKey()).getType()==="unordered-list-item"){
+        if(editorState.getCurrentContent().getBlockForKey(editorState.getSelection().getStartKey()).getType() === "unordered-list-item"){
           setEditorState(RichUtils.toggleBlockType(editorState, 'header-two'));
         }
     };
@@ -129,6 +129,19 @@ export default function TextEditor () {
         console.log('Cтруктура текста:', JSON.stringify(textStructure));
         console.log(textStructure);
     }
+
+    const handlePaste = (text: string): DraftHandleValue => {
+        const contentState = editorState.getCurrentContent();
+        const selection = editorState.getSelection();
+    
+        // Вставляем текст в текущий блок, сохраняя его тип
+        const newContentState = Modifier.replaceText(contentState, selection, text);
+        const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
+    
+        // Обновляем состояние редактора
+        setEditorState(newEditorState);
+        return 'handled';
+    };
     
     return (
         <div className="editor-container">
@@ -139,6 +152,7 @@ export default function TextEditor () {
                 handleKeyCommand={handleKeyCommand}
                 keyBindingFn={keyBindingFn}
                 onBlur={blur}
+                handlePastedText={handlePaste}
             />
             <button onClick={toggleHeading}>Heading</button>
         </div>
