@@ -1,5 +1,14 @@
-import { ContentState, convertToRaw, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding, Modifier } from "draft-js";
-import { useState } from "react";
+import { ContentState, convertToRaw, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding, Modifier, RichUtils } from "draft-js";
+import { SyntheticEvent, useState } from "react";
+import './TextEditor.css';
+interface ContentBlocks {
+    heading: string | null,
+    bullets: string[]
+}
+interface TextStructure {
+    title: string | null,
+    content_blocks: ContentBlocks[]
+  }
 
 export default function TextEditor () {
     const [editorState, setEditorState] = useState<EditorState>(() =>{
@@ -71,14 +80,47 @@ export default function TextEditor () {
         }
         return 'not-handled';
     }
+
+    //Делает буллит заголовком списка
+    const toggleHeading = () => {
+        if(editorState.getCurrentContent().getBlockForKey(editorState.getSelection().getStartKey()).getType()==="unordered-list-item"){
+          setEditorState(RichUtils.toggleBlockType(editorState, 'header-two'));
+        }
+    };
+
+    const blur = () => {
+        const textStructure: TextStructure = {title: '', content_blocks: []}
+        const constentParce = convertToRaw(editorState.getCurrentContent());
+        for(let line of constentParce.blocks) {
+            if(line.type === "header-one"){
+                textStructure.title = line.text;
+            }
+            
+            if(line.type === "header-two"){
+                textStructure.content_blocks.push({heading : line.text, bullets: []})
+            }
+
+            if(line.type === "unordered-list-item") {
+                const content_block = textStructure.content_blocks[textStructure.content_blocks.length - 1];
+                content_block.bullets.push(line.text);
+            }
+        }
+
+        console.log('Cтруктура текста:', JSON.stringify(textStructure));
+        console.log(textStructure);
+    }
     
     return (
-        <Editor
-            editorState={editorState}
-            onChange={handleTitleChange}
-            handleKeyCommand={handleKeyCommand}
-            keyBindingFn={keyBindingFn}
-        />
+        <div className="editor-container">
+            <Editor
+                editorState={editorState}
+                onChange={handleTitleChange}
+                handleKeyCommand={handleKeyCommand}
+                keyBindingFn={keyBindingFn}
+                onBlur={blur}
+            />
+            <button onClick={toggleHeading}>Heading</button>
+        </div>
 
     )
 }
