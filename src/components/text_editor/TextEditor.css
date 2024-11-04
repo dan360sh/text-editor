@@ -27,3 +27,27 @@
 .public-DraftEditor-content {
     height: 100%;
 }
+
+.placeholder-h1::before { 
+    content: "Add a title for your slide…";
+    color: #aaa;
+    font-style: italic;
+    position: absolute;
+    display: inline;
+  }
+  
+  .placeholder-li::before {
+    content: "Start your bullet list here...";
+    color: #aaa;
+    font-style: italic;
+    position: absolute;
+    display: inline;
+  }
+  
+  .placeholder-h2::before {
+    content: "Name your bullet list…";
+    color: #aaa;
+    font-style: italic;
+    position: absolute;
+    display: inline;
+  }

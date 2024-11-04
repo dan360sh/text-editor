@@ -1,14 +1,8 @@
 import { ContentState, convertToRaw, DraftHandleValue, Editor, EditorState, getDefaultKeyBinding, Modifier, RichUtils } from "draft-js";
-import { SyntheticEvent, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import './TextEditor.css';
-interface ContentBlocks {
-    heading: string | null,
-    bullets: string[]
-}
-interface TextStructure {
-    title: string | null,
-    content_blocks: ContentBlocks[]
-  }
+import { findDOMNode } from "react-dom";
+import { TextStructure } from "./text_editor_type";
 
 export default function TextEditor () {
     const [editorState, setEditorState] = useState<EditorState>(() =>{
@@ -30,6 +24,32 @@ export default function TextEditor () {
         initialEditorState = EditorState.push(initialEditorState, updatedContentState, 'change-block-type');
         return initialEditorState;
     });
+
+    const componentRef = useRef(null);
+    const placeholder = (domNode: HTMLElement, cl: string, selector: string) => {
+      const targetDiv = domNode.querySelectorAll(selector);
+      targetDiv.forEach(e => {
+        const br = e.querySelector('br');
+        if(br) {
+          e.classList.add(cl);
+        } else {
+          e.classList.remove(cl);
+        }
+        
+      })
+    }
+
+    useEffect(() => {
+        if (componentRef.current) {
+            const domNode = findDOMNode(componentRef.current);
+            if (domNode instanceof HTMLElement) { 
+                placeholder(domNode, 'placeholder-h1','.DraftEditor-editorContainer h1 div span');
+                placeholder(domNode, 'placeholder-h2','.DraftEditor-editorContainer h2 div span');
+                placeholder(domNode, 'placeholder-li','.DraftEditor-editorContainer li div span');
+            }
+        
+        }
+    })
 
     const handleTitleChange = (newEditorState: EditorState) => {
         setEditorState(newEditorState);
@@ -113,6 +133,7 @@ export default function TextEditor () {
     return (
         <div className="editor-container">
             <Editor
+                ref={componentRef}
                 editorState={editorState}
                 onChange={handleTitleChange}
                 handleKeyCommand={handleKeyCommand}
